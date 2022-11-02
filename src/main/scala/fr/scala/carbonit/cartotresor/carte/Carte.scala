@@ -10,10 +10,21 @@ class Carte(width:Int,
            ) {
 
   def process() : Unit = {
-    val grid = Array.ofDim[2](width, height)
 
+    val grid = prepareGrid()
     // TODO
 
+
+
+
+  }
+
+  private def prepareGrid() : Array[Int][] = {
+    val grid = Array.ofDim[2](width, height)
+
+
+
+    grid
   }
 
   override def toString: String = {

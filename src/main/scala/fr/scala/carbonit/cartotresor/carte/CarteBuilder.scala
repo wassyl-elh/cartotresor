@@ -10,6 +10,8 @@ class CarteBuilder(width:Int,
                    treasures: ListBuffer[Treasure] = ListBuffer(),
                    adventurers: ListBuffer[Adventurer] = ListBuffer()) {
 
+  private val grid = Array[Terrain]
+
   def addMountain(x:Int, y:Int) : Unit = {
     mountains += Mountain(x, y)
   }
