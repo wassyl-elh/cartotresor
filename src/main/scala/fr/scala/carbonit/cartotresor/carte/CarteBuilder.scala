@@ -7,18 +7,18 @@ import scala.collection.mutable.ListBuffer
 class CarteBuilder(width:Int,
                    height:Int,
                    mountains: ListBuffer[Mountain] = ListBuffer(),
-                   treasures: ListBuffer[Treasure] = ListBuffer(),
+                   treasures: ListBuffer[Plains] = ListBuffer(),
                    adventurers: ListBuffer[Adventurer] = ListBuffer()) {
 
   private val grid = initGrid()
 
-  private def initGrid() = {
+  private def initGrid() : Array[Array[Terrain]] = {
     val tmpGrid = Array.ofDim[Terrain](width, height)
 
     for(i<-0 until width; j<-0 until height)
     {
       if(tmpGrid(i)(j) == null){
-        tmpGrid(i)(j) = Plains()
+        tmpGrid(i)(j) = Plains(i, j, 0)
       }
     }
 
@@ -45,7 +45,7 @@ class CarteBuilder(width:Int,
   }
 
   private def cellIsEmpty(x:Int, y:Int) : Boolean = {
-    grid(x)(y).isInstanceOf[Plains]
+    grid(x)(y).isInstanceOf[Plains] && !grid(x)(y).hasTreasure
   }
 
   def addMountain(x:Int, y:Int) : Unit = {
@@ -57,11 +57,11 @@ class CarteBuilder(width:Int,
   }
 
   def addTreasure(x:Int, y:Int, nbTreasures:Int) : Unit = {
-    val t = Treasure(x, y, nbTreasures)
+    val t = Plains(x, y, nbTreasures)
     if(cellIsEmpty(x,y)){
       grid(x)(y) = t
     }
-    treasures += Treasure(x, y, nbTreasures)
+    treasures += Plains(x, y, nbTreasures)
   }
 
   def addAdventurer(name:String, x:Int, y:Int, initialDirection:Cardinals.Cardinal, sequence:Array[Directions.Direction]) : Unit = {

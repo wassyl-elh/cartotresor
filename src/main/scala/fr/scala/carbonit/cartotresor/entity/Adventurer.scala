@@ -2,7 +2,11 @@ package fr.scala.carbonit.cartotresor.entity
 
 object Cardinals extends Enumeration {
   type Cardinal = Value
-  val West, East, North, South = Value
+
+  val North = Value(0, "North")
+  val East  = Value(1, "East")
+  val South = Value(2, "South")
+  val West  = Value(4, "West")
 
   def valueOf(c:Char) : Cardinals.Cardinal =  {
     c match {
@@ -33,6 +37,18 @@ class Adventurer(val name:String,
                  val initialDirection:Cardinals.Cardinal,
                  val sequence:Array[Directions.Direction]) {
 
+  var currentPosX:Int = x
+  var currentPosY:Int = y
+  var currentDirection:Cardinals.Cardinal = initialDirection
+  var indexCurrentMove:Int = 0
+
+  var treasuresFound:Int=0
+
+  def getNextMove() : Directions.Direction = {
+    val direction = sequence(indexCurrentMove)
+    indexCurrentMove += 1
+    direction
+  }
 
   override def toString: String = {
     "[" + name + ", initial direction : " + initialDirection.toString + ", Sequence " + sequence.mkString("Array(", ", ", ")") + "]"
