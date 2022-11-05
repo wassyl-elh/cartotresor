@@ -1,23 +1,33 @@
 package fr.scala.carbonit.cartotresor.carte
 
-import fr.scala.carbonit.cartotresor.entity.{Adventurer, Mountain, Treasure}
+import fr.scala.carbonit.cartotresor.entity.{Adventurer, Cardinals, Directions, Terrain}
 
 class Carte(width:Int,
             height:Int,
-            mountains:List[Mountain],
-            treasures:List[Treasure],
+            grid: Array[Array[Terrain]],
             adventurers:List[Adventurer]
            ) {
 
   def process() : Unit = {
-    val grid = Array.ofDim[2](width, height)
+    while(adventurers.forall(a => !a.done)){
+      adventurers
+        .filter(a => !a.done)
+        .foreach( a => {
+          val previousCell = grid(a.currentPosX)(a.currentPosY)
+          val (newX, newY) = a.getNewPosition
+          val nextCell = grid(newX)(newY)
+          a.updateNewPosition(previousCell, nextCell)
+      })
+    }
+  }
 
-    // TODO
-
+  def results() : Unit = {
+    adventurers
+      .foreach( a => println(a.result()))
   }
 
   override def toString: String = {
-    "Largeur : " + width + ", hauteur : " + height + "\nMontagnes : " + mountains.map(_.toString) + "\nTrésors : " + treasures.map(_.toString) + "\nAventuriers : " + adventurers.map(_.toString)
+    "Largeur : " + width + ", hauteur : " + height + "\nAventuriers : " + adventurers.map(_.toString)
   }
 
 }

@@ -7,7 +7,7 @@ import scala.io.Source
 
 object CarteReader {
 
-  def extractMap(filename: String): Unit = {
+  def extractMap(filename: String) : Carte = {
     val bufferedSource = Source.fromFile(filename)
     val rawLines = bufferedSource.getLines.toList
 
@@ -31,18 +31,13 @@ object CarteReader {
         arr(0) match {
           case "M" => carteBuilder.addMountain(arr(1).toInt, arr(2).toInt)
           case "T" => carteBuilder.addTreasure(arr(1).toInt, arr(2).toInt, arr(3).toInt)
-          case "A" => {
+          case "A" =>
             val sequence = arr(5).toArray.map((c: Char) => Directions.valueOf(c))
             carteBuilder.addAdventurer(arr(1), arr(2).toInt, arr(3).toInt, Cardinals.valueOf(arr(4).head), sequence)
-          }
           case _ => throw new InvalidCarteParsingException("Unknown default direction given : " + arr(0))
         }
       })
-
-    val carte = carteBuilder.build()
-
-    println(carte.toString)
-
+    carteBuilder.build()
   }
 
   //  private def translateFromFileContent() = {

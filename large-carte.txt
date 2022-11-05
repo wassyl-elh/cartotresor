@@ -1,0 +1,11 @@
+C - 4 - 5
+M - 1 - 0
+M - 2 - 2
+M - 1 - 4
+M - 3 - 4
+T - 0 - 0 - 1
+T - 2 - 0 - 2
+T - 3 - 2 - 1
+T - 2 - 4 - 2
+A - Walter - 0 - 2 - S - AGAGAAGADADDAGAAGADDADAGAAGADA
+A - Jesse - 0 - 3 - E - DADDADAADADADADAGAAGADADADDA
