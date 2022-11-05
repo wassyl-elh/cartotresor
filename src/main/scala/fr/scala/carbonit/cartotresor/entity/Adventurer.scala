@@ -27,16 +27,16 @@ class Adventurer(val name:String,
     }
   }
 
-  def updateNewPosition(nextCell:Terrain) : Unit = {
+  def updateNewPosition(previousCell:Terrain, nextCell:Terrain) : Unit = {
     sequence(indexCurrentDirection) match {
-      case Directions.Forward   => forward(nextCell)
-      case Directions.TurnLeft  => turnLeft
-      case Directions.TurnRight => turnRight
+      case Directions.Forward   => forward(previousCell, nextCell)
+      case Directions.TurnLeft  => turnLeft()
+      case Directions.TurnRight => turnRight()
     }
     updateNextDirection()
   }
 
-  private def forward(nextCell:Terrain): Unit = {
+  private def forward(previousCell:Terrain, nextCell:Terrain): Unit = {
     if(!nextCell.canCross){
       println(name + " can not cross " + nextCell)
       return
@@ -46,11 +46,13 @@ class Adventurer(val name:String,
     updateCurrentPos(newX, newY)
     // Give treasure to adventurer
     if(nextCell.hasTreasure){
-      nextCell.pickTreasure(this)
+      nextCell.accept(this)
     }
+    // Previous cell is noticed to be unoccupied
+    previousCell.clear()
   }
 
-  private def turnLeft = {
+  private def turnLeft() : Unit = {
 //    println("turnLeft " + currentDirection.id)
     // If current direction is North
     if( currentDirection.id == 0){
@@ -61,7 +63,7 @@ class Adventurer(val name:String,
     }
   }
 
-  private def turnRight = {
+  private def turnRight() : Unit = {
 //    println("turnRight " + currentDirection.id)
     // If current direction is West
     if( currentDirection.id == (DIRECTION_ARRAY.length - 1)){

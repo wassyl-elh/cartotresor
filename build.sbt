@@ -6,3 +6,8 @@ lazy val root = (project in file("."))
   .settings(
     name := "cartotresor"
   )
+
+resolvers += ("Artima Maven Repository" at "http://repo.artima.com/releases").withAllowInsecureProtocol(true)
+
+libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.14" % "test"

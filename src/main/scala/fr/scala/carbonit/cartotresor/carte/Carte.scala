@@ -13,13 +13,12 @@ class Carte(width:Int,
       adventurers
         .filter(a => !a.done)
         .foreach( a => {
+          val previousCell = grid(a.currentPosX)(a.currentPosY)
           val (newX, newY) = a.getNewPosition
-          val cell = grid(newX)(newY)
-          a.updateNewPosition(cell)
+          val nextCell = grid(newX)(newY)
+          a.updateNewPosition(previousCell, nextCell)
       })
     }
-    adventurers
-      .foreach( a => print(a))
   }
 
   override def toString: String = {
