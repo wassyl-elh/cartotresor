@@ -43,6 +43,7 @@ class Adventurer(val name:String,
     }
     // Get new coordinates if adventurer advances
     val (newX, newY) = computeForward()
+    // TODO Limit movement Carte bounds
     updateCurrentPos(newX, newY)
     // Give treasure to adventurer
     if(nextCell.hasTreasure){
@@ -95,8 +96,11 @@ class Adventurer(val name:String,
     }
   }
 
+  def result() : String = {
+    name + " - Last position is ("+currentPosX+","+currentPosY+") and has found " + treasuresFound
+  }
   override def toString: String = {
-    "[" + name + ", initial direction : " + initialDirection.toString + ", Sequence " + sequence.mkString("Array(", ", ", ")") + ".\nLast position is ("+currentPosX+","+currentPosY+") and has found "+ treasuresFound +" ]"
+    "[" + name + ", initial direction : " + initialDirection.toString + ", Sequence " + sequence.mkString("Array(", ", ", ")") + "]"
   }
 
 }

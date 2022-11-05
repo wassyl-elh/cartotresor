@@ -21,6 +21,11 @@ class Carte(width:Int,
     }
   }
 
+  def results() : Unit = {
+    adventurers
+      .foreach( a => println(a.result()))
+  }
+
   override def toString: String = {
     "Largeur : " + width + ", hauteur : " + height + "\nAventuriers : " + adventurers.map(_.toString)
   }
