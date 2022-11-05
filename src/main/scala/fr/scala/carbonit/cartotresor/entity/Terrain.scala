@@ -1,11 +1,17 @@
 package fr.scala.carbonit.cartotresor.entity
 
+import fr.scala.carbonit.cartotresor.entity.Cardinals.{East, North, South, West}
+
 sealed trait Terrain {
 
   def canCross: Boolean
   def hasTreasure: Boolean
   def pickTreasure(a: Adventurer) : Boolean
 
+}
+
+object Terrain {
+  val DIRECTION_ARRAY: Array[Cardinals.Value] = Array(North, East, South, West)
 }
 
 case class Mountain(x: Int, y: Int) extends Terrain {
@@ -15,13 +21,16 @@ case class Mountain(x: Int, y: Int) extends Terrain {
 }
 
 case class Plains(x: Int, y: Int, nbTreasures: Int) extends Terrain{
+
+  private var currentTreasures = nbTreasures
+
   override def canCross: Boolean = true
   override def hasTreasure: Boolean = nbTreasures > 0
   override def pickTreasure(a: Adventurer): Boolean = {
-    if( nbTreasures <= 0 ) {
+    if( currentTreasures <= 0 ) {
       return false
     }
-    nbTreasures -= 1
+    currentTreasures -= 1
     a.treasuresFound += 1
     true
   }

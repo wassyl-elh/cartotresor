@@ -1,35 +1,7 @@
 package fr.scala.carbonit.cartotresor.entity
 
-object Cardinals extends Enumeration {
-  type Cardinal = Value
-
-  val North = Value(0, "North")
-  val East  = Value(1, "East")
-  val South = Value(2, "South")
-  val West  = Value(4, "West")
-
-  def valueOf(c:Char) : Cardinals.Cardinal =  {
-    c match {
-      case 'W' => West
-      case 'E' => East
-      case 'N' => North
-      case 'S' => South
-    }
-  }
-}
-
-object Directions extends Enumeration {
-  type Direction = Value
-  val Forward, TurnLeft, TurnRight = Value
-
-  def valueOf(c:Char) : Directions.Direction =  {
-    c match {
-      case 'A' => Forward
-      case 'D' => TurnRight
-      case 'G' => TurnLeft
-    }
-  }
-}
+import fr.scala.carbonit.cartotresor.entity.Cardinals.{East, North, South, West}
+import fr.scala.carbonit.cartotresor.entity.Terrain.DIRECTION_ARRAY
 
 class Adventurer(val name:String,
                  val x:Int,
@@ -40,18 +12,89 @@ class Adventurer(val name:String,
   var currentPosX:Int = x
   var currentPosY:Int = y
   var currentDirection:Cardinals.Cardinal = initialDirection
-  var indexCurrentMove:Int = 0
-
+  var indexCurrentDirection:Int = 0
+  var done = false
   var treasuresFound:Int=0
 
-  def getNextMove() : Directions.Direction = {
-    val direction = sequence(indexCurrentMove)
-    indexCurrentMove += 1
-    direction
+  def getNextDirection : Directions.Direction = {
+    sequence(indexCurrentDirection)
+  }
+
+  def getNewPosition: (Int, Int) = {
+    sequence(indexCurrentDirection) match {
+      case Directions.Forward => computeForward()
+      case _ => (currentPosX, currentPosY)
+    }
+  }
+
+  def updateNewPosition(nextCell:Terrain) : Unit = {
+    sequence(indexCurrentDirection) match {
+      case Directions.Forward   => forward(nextCell)
+      case Directions.TurnLeft  => turnLeft
+      case Directions.TurnRight => turnRight
+    }
+    updateNextDirection()
+  }
+
+  private def forward(nextCell:Terrain): Unit = {
+    if(!nextCell.canCross){
+      println(name + " can not cross " + nextCell)
+      return
+    }
+    // Get new coordinates if adventurer advances
+    val (newX, newY) = computeForward()
+    updateCurrentPos(newX, newY)
+    // Give treasure to adventurer
+    if(nextCell.hasTreasure){
+      nextCell.pickTreasure(this)
+    }
+  }
+
+  private def turnLeft = {
+//    println("turnLeft " + currentDirection.id)
+    // If current direction is North
+    if( currentDirection.id == 0){
+      // Take value West
+      currentDirection = West
+    } else {
+      currentDirection = DIRECTION_ARRAY(currentDirection.id - 1)
+    }
+  }
+
+  private def turnRight = {
+//    println("turnRight " + currentDirection.id)
+    // If current direction is West
+    if( currentDirection.id == (DIRECTION_ARRAY.length - 1)){
+      // Take value North
+      currentDirection = North
+    } else {
+      currentDirection = DIRECTION_ARRAY(currentDirection.id + 1)
+    }
+  }
+
+  private def computeForward() : (Int, Int) = {
+    currentDirection match {
+      case North => (currentPosX, currentPosY-1)
+      case East  => (currentPosX+1, currentPosY)
+      case South => (currentPosX, currentPosY+1)
+      case West  => (currentPosX-1, currentPosY)
+    }
+  }
+
+  private def updateCurrentPos(newX: Int, newY: Int) : Unit = {
+    currentPosX = newX
+    currentPosY = newY
+  }
+
+  private def updateNextDirection() : Unit = {
+    indexCurrentDirection += 1
+    if(indexCurrentDirection == sequence.length){
+      done = true
+    }
   }
 
   override def toString: String = {
-    "[" + name + ", initial direction : " + initialDirection.toString + ", Sequence " + sequence.mkString("Array(", ", ", ")") + "]"
+    "[" + name + ", initial direction : " + initialDirection.toString + ", Sequence " + sequence.mkString("Array(", ", ", ")") + ".\nLast position is ("+currentPosX+","+currentPosY+") and has found "+ treasuresFound +" ]"
   }
 
 }

@@ -9,5 +9,6 @@ object Main {
 //    val carte = CarteReader.extractMap(filename)
     CarteReader.extractMap(filename)
 
+
   }
 }

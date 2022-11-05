@@ -43,6 +43,7 @@ object CarteReader {
 
     println(carte.toString)
 
+    carte.process()
   }
 
   //  private def translateFromFileContent() = {
