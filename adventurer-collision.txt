@@ -1,3 +1,4 @@
 C - 4 - 4
+T - 3 - 3 - 1
 A - Walter - 0 - 0 - E - AADAGA
 A - Jesse - 0 - 1 - N - DDADD
