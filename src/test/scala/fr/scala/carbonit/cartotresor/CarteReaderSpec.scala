@@ -1,7 +1,10 @@
 package fr.scala.carbonit.cartotresor
 
 import fr.scala.carbonit.cartotresor.carte.CarteReader
+import fr.scala.carbonit.cartotresor.exception.InvalidCarteParsingException
 import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers.be
+import org.scalatest.matchers.should.Matchers.a
 
 class CarteReaderSpec extends AnyFlatSpec{
 
@@ -23,4 +26,39 @@ class CarteReaderSpec extends AnyFlatSpec{
     carte.results()
   }
 
+  it should "throw InvalidCarteParsingException if a mountain is placed out of boundaries" in {
+    a [InvalidCarteParsingException] should be thrownBy{
+      CarteReader.extractMap("wrong-carte-1.txt")
+    }
+  }
+
+  it should "throw InvalidCarteParsingException if no Carte are present" in {
+    a [InvalidCarteParsingException] should be thrownBy{
+      CarteReader.extractMap("wrong-carte-2.txt")
+    }
+  }
+
+  it should "throw InvalidCarteParsingException if wrong letters are used" in {
+    a [InvalidCarteParsingException] should be thrownBy{
+      CarteReader.extractMap("wrong-carte-3.txt")
+    }
+  }
+
+  it should "throw InvalidCarteParsingException if no adventurer are present" in {
+    a [InvalidCarteParsingException] should be thrownBy{
+      CarteReader.extractMap("wrong-carte-4.txt")
+    }
+  }
+
+  it should "throw InvalidCarteParsingException if no treasures are present" in {
+    a [InvalidCarteParsingException] should be thrownBy{
+      CarteReader.extractMap("wrong-carte-5.txt")
+    }
+  }
+
+  it should "throw NoSuchElementException if file is empty" in {
+    a [NoSuchElementException] should be thrownBy{
+      CarteReader.extractMap("empty.txt")
+    }
+  }
 }

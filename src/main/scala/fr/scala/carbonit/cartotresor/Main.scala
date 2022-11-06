@@ -4,16 +4,24 @@ import fr.scala.carbonit.cartotresor.carte.CarteReader
 
 object Main {
   def main(args: Array[String]): Unit = {
-    println("La carte aux trésors")
+    println("CARTE AUX TRESORS")
     val filename = "madre-de-dios.txt"
-    val filename2 = "large-carte.txt"
-//    val carte = CarteReader.extractMap(filename)
-    val carte = CarteReader.extractMap(filename2)
+    val output = "output.txt"
 
-    //
+    println("Reading file '"+filename+"' ... ")
+    // Read carte from file
+    val carte = CarteReader.extractMap(filename)
+
+    println("Computing adventurers' travel ...")
+    // Compute adventurers' travel
     carte.process()
 
-    // Print results
+    println("Results :")
+    // Print adventurer results
     carte.results()
+
+    println("Writing into " + output)
+    // Write results into output file
+    carte.writeInto(output)
   }
 }
