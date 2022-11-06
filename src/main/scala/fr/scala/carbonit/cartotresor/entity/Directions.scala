@@ -2,7 +2,10 @@ package fr.scala.carbonit.cartotresor.entity
 
 object Directions extends Enumeration {
   type Direction = Value
-  val Forward, TurnLeft, TurnRight = Value
+
+  val Forward: Directions.Value = Value("A")
+  val TurnLeft: Directions.Value = Value("G")
+  val TurnRight: Directions.Value = Value("D")
 
   def valueOf(c:Char) : Directions.Direction =  {
     c match {

@@ -7,18 +7,21 @@ class Adventurer(val name:String,
                  val x:Int,
                  val y:Int,
                  val initialDirection:Cardinals.Cardinal,
-                 val sequence:Array[Directions.Direction]) {
+                 val sequence:Array[Directions.Direction],
+                // maxWidth and maxHeight are used to limit the adventurer's movements
+                 val maxWidth:Int,
+                 val maxHeight:Int) {
 
   var currentPosX:Int = x
   var currentPosY:Int = y
   var currentDirection:Cardinals.Cardinal = initialDirection
+
+  // Index used to parse the sequence of instructions (AAGAD ..)
   var indexCurrentDirection:Int = 0
+
+  // If the adventurer still has moves to make
   var done = false
   var treasuresFound:Int=0
-
-  def getNextDirection : Directions.Direction = {
-    sequence(indexCurrentDirection)
-  }
 
   def getNewPosition: (Int, Int) = {
     sequence(indexCurrentDirection) match {
@@ -43,7 +46,10 @@ class Adventurer(val name:String,
     }
     // Get new coordinates if adventurer advances
     val (newX, newY) = computeForward()
-    // TODO Limit movement Carte bounds
+    if(isOutOfBounds(newX, newY)){
+      println(name + " is blocked by map boundaries : ("+newX+","+newY+")")
+      return
+    }
     updateCurrentPos(newX, newY)
     // Give treasure to adventurer
     if(nextCell.hasTreasure){
@@ -99,8 +105,13 @@ class Adventurer(val name:String,
   def result() : String = {
     name + " - Last position is ("+currentPosX+","+currentPosY+") and has found " + treasuresFound
   }
+
+  private def isOutOfBounds(x:Int, y:Int) : Boolean = {
+    x < 0 || x >= maxWidth || y < 0 || y >= maxHeight
+  }
+
   override def toString: String = {
-    "[" + name + ", initial direction : " + initialDirection.toString + ", Sequence " + sequence.mkString("Array(", ", ", ")") + "]"
+    "A - " + name + " - " + currentPosX + " - " + currentPosY + " - " + currentDirection + " - " + treasuresFound
   }
 
 }

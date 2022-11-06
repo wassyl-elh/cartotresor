@@ -4,14 +4,17 @@ import fr.scala.carbonit.cartotresor.entity._
 
 import scala.collection.mutable.ListBuffer
 
+// Object dedicated to build Carte objects
 class CarteBuilder(width:Int,
                    height:Int,
                    mountains: ListBuffer[Mountain] = ListBuffer(),
                    treasures: ListBuffer[Plains] = ListBuffer(),
                    adventurers: ListBuffer[Adventurer] = ListBuffer()) {
 
+  // Preparing grid that will be passed to Carte instance
   private val grid = initGrid()
 
+  // Creates the grid and sets all cells to a Plains instance with no treasure.
   private def initGrid() : Array[Array[Terrain]] = {
     val tmpGrid = Array.ofDim[Terrain](width, height)
 
@@ -22,28 +25,10 @@ class CarteBuilder(width:Int,
       }
     }
 
-//    val entities = mountains ++ treasures
-//    mountains.foreach(m => {
-//      print("hey")
-//      tmpGrid(m.x)(m.y) = m
-//    })
-//    treasures.foreach(t => tmpGrid(t.x)(t.y) = t)
-
-//    for(i<-0 until width; j<-0 until height)
-//    {
-//      if(tmpGrid(i)(j) == null){
-//        tmpGrid(i)(j) = Plains()
-//      }
-//    }
-
-//    for(i<-0 until width; j<-0 until height)
-//    {
-//      print(i, j, tmpGrid(i)(j))
-//    }
-
     tmpGrid
   }
 
+  // Returns true if cell is a Plains with no treasure
   private def cellIsEmpty(x:Int, y:Int) : Boolean = {
     grid(x)(y).isInstanceOf[Plains] && !grid(x)(y).hasTreasure
   }
@@ -61,21 +46,16 @@ class CarteBuilder(width:Int,
     if(cellIsEmpty(x,y)){
       grid(x)(y) = t
     }
-    treasures += Plains(x, y, nbTreasures)
+    treasures += t
   }
 
   def addAdventurer(name:String, x:Int, y:Int, initialDirection:Cardinals.Cardinal, sequence:Array[Directions.Direction]) : Unit = {
-    adventurers += new Adventurer(name, x, y, initialDirection, sequence)
+    adventurers += new Adventurer(name, x, y, initialDirection, sequence, width, height)
   }
 
+  // Finally builds the Carte object. Passes all informations to it, including the grid.
   def build() : Carte = {
-
-//    for(i<-0 until width; j<-0 until height)
-//    {
-//      print(i, j, grid(i)(j))
-//    }
-
-    new Carte(width, height, grid, adventurers.toList)
+    new Carte(width, height, grid, mountains.toList, treasures.toList, adventurers.toList)
   }
 
 }

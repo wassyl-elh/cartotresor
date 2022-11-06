@@ -5,8 +5,10 @@ import fr.scala.carbonit.cartotresor.entity.{Cardinals, Directions}
 
 import scala.io.Source
 
+// Object dedicated to parse files to extract Carte instances
 object CarteReader {
 
+  // Creates a Carte instance from a file
   def extractMap(filename: String) : Carte = {
     val bufferedSource = Source.fromFile(filename)
     val rawLines = bufferedSource.getLines.toList
@@ -17,8 +19,8 @@ object CarteReader {
     // Separating each information in each line
     val lines = rawLines.map((str: String) => str.split("-").map(_.trim))
 
-    // TODO Utile ?
-    if (lines.head(0) != "C") throw new InvalidCarteParsingException("Define a map")
+    if (lines.head(0) != "C")
+      throw new InvalidCarteParsingException("Define a map")
 
     val width = lines.head(1).toInt
     val height = lines.head(2).toInt
@@ -39,9 +41,5 @@ object CarteReader {
       })
     carteBuilder.build()
   }
-
-  //  private def translateFromFileContent() = {
-  //
-  //  }
 
 }
